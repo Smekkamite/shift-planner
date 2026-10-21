@@ -1,0 +1,1140 @@
+{
+  "people": [
+    {
+      "id": "P1",
+      "name": "Amelia Brooks",
+      "availability": {
+        "2026-11-02": true,
+        "2026-11-03": true,
+        "2026-11-04": true,
+        "2026-11-05": true,
+        "2026-11-06": true,
+        "2026-11-07": true,
+        "2026-11-08": true,
+        "2026-11-09": true,
+        "2026-11-10": true,
+        "2026-11-11": true,
+        "2026-11-12": true,
+        "2026-11-13": true,
+        "2026-11-14": true,
+        "2026-11-15": true,
+        "2026-11-16": true,
+        "2026-11-17": true,
+        "2026-11-18": true,
+        "2026-11-19": true,
+        "2026-11-20": true,
+        "2026-11-21": true,
+        "2026-11-22": true,
+        "2026-11-23": true,
+        "2026-11-24": true,
+        "2026-11-25": true,
+        "2026-11-26": true,
+        "2026-11-27": true,
+        "2026-11-28": true,
+        "2026-11-29": true
+      }
+    },
+    {
+      "id": "P2",
+      "name": "Mateo García",
+      "availability": {
+        "2026-11-02": true,
+        "2026-11-03": true,
+        "2026-11-04": true,
+        "2026-11-05": true,
+        "2026-11-06": true,
+        "2026-11-07": true,
+        "2026-11-08": true,
+        "2026-11-09": true,
+        "2026-11-10": true,
+        "2026-11-11": true,
+        "2026-11-12": true,
+        "2026-11-13": true,
+        "2026-11-14": true,
+        "2026-11-15": true,
+        "2026-11-16": true,
+        "2026-11-17": true,
+        "2026-11-18": true,
+        "2026-11-19": true,
+        "2026-11-20": true,
+        "2026-11-21": true,
+        "2026-11-22": true,
+        "2026-11-23": true,
+        "2026-11-24": true,
+        "2026-11-25": true,
+        "2026-11-26": true,
+        "2026-11-27": true,
+        "2026-11-28": true,
+        "2026-11-29": true
+      }
+    },
+    {
+      "id": "P3",
+      "name": "Amina Hassan",
+      "availability": {
+        "2026-11-02": true,
+        "2026-11-03": true,
+        "2026-11-04": true,
+        "2026-11-05": true,
+        "2026-11-06": true,
+        "2026-11-07": true,
+        "2026-11-08": true,
+        "2026-11-09": true,
+        "2026-11-10": true,
+        "2026-11-11": true,
+        "2026-11-12": true,
+        "2026-11-13": true,
+        "2026-11-14": true,
+        "2026-11-15": true,
+        "2026-11-16": true,
+        "2026-11-17": true,
+        "2026-11-18": true,
+        "2026-11-19": true,
+        "2026-11-20": true,
+        "2026-11-21": true,
+        "2026-11-22": true,
+        "2026-11-23": true,
+        "2026-11-24": true,
+        "2026-11-25": true,
+        "2026-11-26": true,
+        "2026-11-27": true,
+        "2026-11-28": true,
+        "2026-11-29": true
+      }
+    },
+    {
+      "id": "P4",
+      "name": "Kenji Tanaka",
+      "availability": {
+        "2026-11-02": true,
+        "2026-11-03": true,
+        "2026-11-04": true,
+        "2026-11-05": true,
+        "2026-11-06": true,
+        "2026-11-07": true,
+        "2026-11-08": true,
+        "2026-11-09": true,
+        "2026-11-10": true,
+        "2026-11-11": true,
+        "2026-11-12": true,
+        "2026-11-13": true,
+        "2026-11-14": true,
+        "2026-11-15": true,
+        "2026-11-16": true,
+        "2026-11-17": true,
+        "2026-11-18": true,
+        "2026-11-19": true,
+        "2026-11-20": true,
+        "2026-11-21": true,
+        "2026-11-22": true,
+        "2026-11-23": true,
+        "2026-11-24": true,
+        "2026-11-25": true,
+        "2026-11-26": true,
+        "2026-11-27": true,
+        "2026-11-28": true,
+        "2026-11-29": true
+      }
+    },
+    {
+      "id": "P5",
+      "name": "Chloé Dubois",
+      "availability": {
+        "2026-11-02": true,
+        "2026-11-03": true,
+        "2026-11-04": true,
+        "2026-11-05": true,
+        "2026-11-06": true,
+        "2026-11-07": true,
+        "2026-11-08": true,
+        "2026-11-09": true,
+        "2026-11-10": true,
+        "2026-11-11": true,
+        "2026-11-12": true,
+        "2026-11-13": true,
+        "2026-11-14": true,
+        "2026-11-15": true,
+        "2026-11-16": true,
+        "2026-11-17": true,
+        "2026-11-18": true,
+        "2026-11-19": true,
+        "2026-11-20": true,
+        "2026-11-21": true,
+        "2026-11-22": true,
+        "2026-11-23": true,
+        "2026-11-24": true,
+        "2026-11-25": true,
+        "2026-11-26": true,
+        "2026-11-27": true,
+        "2026-11-28": true,
+        "2026-11-29": true
+      }
+    },
+    {
+      "id": "P6",
+      "name": "Liam O’Connor",
+      "availability": {
+        "2026-11-02": true,
+        "2026-11-03": true,
+        "2026-11-04": true,
+        "2026-11-05": true,
+        "2026-11-06": true,
+        "2026-11-07": true,
+        "2026-11-08": true,
+        "2026-11-09": true,
+        "2026-11-10": true,
+        "2026-11-11": true,
+        "2026-11-12": true,
+        "2026-11-13": true,
+        "2026-11-14": true,
+        "2026-11-15": true,
+        "2026-11-16": true,
+        "2026-11-17": true,
+        "2026-11-18": true,
+        "2026-11-19": true,
+        "2026-11-20": true,
+        "2026-11-21": true,
+        "2026-11-22": true,
+        "2026-11-23": true,
+        "2026-11-24": true,
+        "2026-11-25": true,
+        "2026-11-26": true,
+        "2026-11-27": true,
+        "2026-11-28": true,
+        "2026-11-29": true
+      }
+    },
+    {
+      "id": "P7",
+      "name": "Priya Sharma",
+      "availability": {
+        "2026-11-02": true,
+        "2026-11-03": true,
+        "2026-11-04": true,
+        "2026-11-05": true,
+        "2026-11-06": true,
+        "2026-11-07": true,
+        "2026-11-08": true,
+        "2026-11-09": true,
+        "2026-11-10": true,
+        "2026-11-11": true,
+        "2026-11-12": true,
+        "2026-11-13": true,
+        "2026-11-14": true,
+        "2026-11-15": true,
+        "2026-11-16": true,
+        "2026-11-17": true,
+        "2026-11-18": true,
+        "2026-11-19": true,
+        "2026-11-20": true,
+        "2026-11-21": true,
+        "2026-11-22": true,
+        "2026-11-23": true,
+        "2026-11-24": true,
+        "2026-11-25": true,
+        "2026-11-26": true,
+        "2026-11-27": true,
+        "2026-11-28": true,
+        "2026-11-29": true
+      }
+    }
+  ],
+  "shifts": [
+    {
+      "id": "S1-1",
+      "date": "2026-11-02",
+      "start": "16:00",
+      "end": "00:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S1-2",
+      "date": "2026-11-02",
+      "start": "16:00",
+      "end": "00:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S1-3",
+      "date": "2026-11-02",
+      "start": "18:00",
+      "end": "02:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S1-4",
+      "date": "2026-11-02",
+      "start": "18:00",
+      "end": "02:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S2-1",
+      "date": "2026-11-03",
+      "start": "16:00",
+      "end": "00:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S2-2",
+      "date": "2026-11-03",
+      "start": "16:00",
+      "end": "00:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S2-3",
+      "date": "2026-11-03",
+      "start": "18:00",
+      "end": "02:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S2-4",
+      "date": "2026-11-03",
+      "start": "18:00",
+      "end": "02:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S3-1",
+      "date": "2026-11-04",
+      "start": "16:00",
+      "end": "00:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S3-2",
+      "date": "2026-11-04",
+      "start": "16:00",
+      "end": "00:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S3-3",
+      "date": "2026-11-04",
+      "start": "18:00",
+      "end": "02:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S3-4",
+      "date": "2026-11-04",
+      "start": "18:00",
+      "end": "02:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S4-1",
+      "date": "2026-11-05",
+      "start": "16:00",
+      "end": "00:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S4-2",
+      "date": "2026-11-05",
+      "start": "16:00",
+      "end": "00:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S4-3",
+      "date": "2026-11-05",
+      "start": "18:00",
+      "end": "02:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S4-4",
+      "date": "2026-11-05",
+      "start": "18:00",
+      "end": "02:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S5-1",
+      "date": "2026-11-06",
+      "start": "16:00",
+      "end": "00:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S5-2",
+      "date": "2026-11-06",
+      "start": "16:00",
+      "end": "00:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S5-3",
+      "date": "2026-11-06",
+      "start": "18:00",
+      "end": "02:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S5-4",
+      "date": "2026-11-06",
+      "start": "18:00",
+      "end": "02:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S6-1",
+      "date": "2026-11-07",
+      "start": "16:00",
+      "end": "00:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S6-2",
+      "date": "2026-11-07",
+      "start": "16:00",
+      "end": "00:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S6-3",
+      "date": "2026-11-07",
+      "start": "18:00",
+      "end": "02:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S6-4",
+      "date": "2026-11-07",
+      "start": "18:00",
+      "end": "02:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S7-1",
+      "date": "2026-11-08",
+      "start": "16:00",
+      "end": "00:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S7-2",
+      "date": "2026-11-08",
+      "start": "16:00",
+      "end": "00:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S7-3",
+      "date": "2026-11-08",
+      "start": "18:00",
+      "end": "02:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S7-4",
+      "date": "2026-11-08",
+      "start": "18:00",
+      "end": "02:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S8-1",
+      "date": "2026-11-09",
+      "start": "16:00",
+      "end": "00:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S8-2",
+      "date": "2026-11-09",
+      "start": "16:00",
+      "end": "00:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S8-3",
+      "date": "2026-11-09",
+      "start": "18:00",
+      "end": "02:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S8-4",
+      "date": "2026-11-09",
+      "start": "18:00",
+      "end": "02:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S9-1",
+      "date": "2026-11-10",
+      "start": "16:00",
+      "end": "00:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S9-2",
+      "date": "2026-11-10",
+      "start": "16:00",
+      "end": "00:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S9-3",
+      "date": "2026-11-10",
+      "start": "18:00",
+      "end": "02:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S9-4",
+      "date": "2026-11-10",
+      "start": "18:00",
+      "end": "02:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S10-1",
+      "date": "2026-11-11",
+      "start": "16:00",
+      "end": "00:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S10-2",
+      "date": "2026-11-11",
+      "start": "16:00",
+      "end": "00:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S10-3",
+      "date": "2026-11-11",
+      "start": "18:00",
+      "end": "02:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S10-4",
+      "date": "2026-11-11",
+      "start": "18:00",
+      "end": "02:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S11-1",
+      "date": "2026-11-12",
+      "start": "16:00",
+      "end": "00:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S11-2",
+      "date": "2026-11-12",
+      "start": "16:00",
+      "end": "00:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S11-3",
+      "date": "2026-11-12",
+      "start": "18:00",
+      "end": "02:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S11-4",
+      "date": "2026-11-12",
+      "start": "18:00",
+      "end": "02:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S12-1",
+      "date": "2026-11-13",
+      "start": "16:00",
+      "end": "00:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S12-2",
+      "date": "2026-11-13",
+      "start": "16:00",
+      "end": "00:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S12-3",
+      "date": "2026-11-13",
+      "start": "18:00",
+      "end": "02:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S12-4",
+      "date": "2026-11-13",
+      "start": "18:00",
+      "end": "02:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S13-1",
+      "date": "2026-11-14",
+      "start": "16:00",
+      "end": "00:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S13-2",
+      "date": "2026-11-14",
+      "start": "16:00",
+      "end": "00:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S13-3",
+      "date": "2026-11-14",
+      "start": "18:00",
+      "end": "02:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S13-4",
+      "date": "2026-11-14",
+      "start": "18:00",
+      "end": "02:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S14-1",
+      "date": "2026-11-15",
+      "start": "16:00",
+      "end": "00:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S14-2",
+      "date": "2026-11-15",
+      "start": "16:00",
+      "end": "00:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S14-3",
+      "date": "2026-11-15",
+      "start": "18:00",
+      "end": "02:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S14-4",
+      "date": "2026-11-15",
+      "start": "18:00",
+      "end": "02:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S15-1",
+      "date": "2026-11-16",
+      "start": "16:00",
+      "end": "00:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S15-2",
+      "date": "2026-11-16",
+      "start": "16:00",
+      "end": "00:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S15-3",
+      "date": "2026-11-16",
+      "start": "18:00",
+      "end": "02:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S15-4",
+      "date": "2026-11-16",
+      "start": "18:00",
+      "end": "02:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S16-1",
+      "date": "2026-11-17",
+      "start": "16:00",
+      "end": "00:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S16-2",
+      "date": "2026-11-17",
+      "start": "16:00",
+      "end": "00:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S16-3",
+      "date": "2026-11-17",
+      "start": "18:00",
+      "end": "02:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S16-4",
+      "date": "2026-11-17",
+      "start": "18:00",
+      "end": "02:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S17-1",
+      "date": "2026-11-18",
+      "start": "16:00",
+      "end": "00:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S17-2",
+      "date": "2026-11-18",
+      "start": "16:00",
+      "end": "00:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S17-3",
+      "date": "2026-11-18",
+      "start": "18:00",
+      "end": "02:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S17-4",
+      "date": "2026-11-18",
+      "start": "18:00",
+      "end": "02:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S18-1",
+      "date": "2026-11-19",
+      "start": "16:00",
+      "end": "00:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S18-2",
+      "date": "2026-11-19",
+      "start": "16:00",
+      "end": "00:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S18-3",
+      "date": "2026-11-19",
+      "start": "18:00",
+      "end": "02:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S18-4",
+      "date": "2026-11-19",
+      "start": "18:00",
+      "end": "02:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S19-1",
+      "date": "2026-11-20",
+      "start": "16:00",
+      "end": "00:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S19-2",
+      "date": "2026-11-20",
+      "start": "16:00",
+      "end": "00:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S19-3",
+      "date": "2026-11-20",
+      "start": "18:00",
+      "end": "02:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S19-4",
+      "date": "2026-11-20",
+      "start": "18:00",
+      "end": "02:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S20-1",
+      "date": "2026-11-21",
+      "start": "16:00",
+      "end": "00:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S20-2",
+      "date": "2026-11-21",
+      "start": "16:00",
+      "end": "00:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S20-3",
+      "date": "2026-11-21",
+      "start": "18:00",
+      "end": "02:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S20-4",
+      "date": "2026-11-21",
+      "start": "18:00",
+      "end": "02:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S21-1",
+      "date": "2026-11-22",
+      "start": "16:00",
+      "end": "00:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S21-2",
+      "date": "2026-11-22",
+      "start": "16:00",
+      "end": "00:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S21-3",
+      "date": "2026-11-22",
+      "start": "18:00",
+      "end": "02:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S21-4",
+      "date": "2026-11-22",
+      "start": "18:00",
+      "end": "02:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S22-1",
+      "date": "2026-11-23",
+      "start": "16:00",
+      "end": "00:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S22-2",
+      "date": "2026-11-23",
+      "start": "16:00",
+      "end": "00:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S22-3",
+      "date": "2026-11-23",
+      "start": "18:00",
+      "end": "02:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S22-4",
+      "date": "2026-11-23",
+      "start": "18:00",
+      "end": "02:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S23-1",
+      "date": "2026-11-24",
+      "start": "16:00",
+      "end": "00:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S23-2",
+      "date": "2026-11-24",
+      "start": "16:00",
+      "end": "00:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S23-3",
+      "date": "2026-11-24",
+      "start": "18:00",
+      "end": "02:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S23-4",
+      "date": "2026-11-24",
+      "start": "18:00",
+      "end": "02:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S24-1",
+      "date": "2026-11-25",
+      "start": "16:00",
+      "end": "00:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S24-2",
+      "date": "2026-11-25",
+      "start": "16:00",
+      "end": "00:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S24-3",
+      "date": "2026-11-25",
+      "start": "18:00",
+      "end": "02:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S24-4",
+      "date": "2026-11-25",
+      "start": "18:00",
+      "end": "02:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S25-1",
+      "date": "2026-11-26",
+      "start": "16:00",
+      "end": "00:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S25-2",
+      "date": "2026-11-26",
+      "start": "16:00",
+      "end": "00:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S25-3",
+      "date": "2026-11-26",
+      "start": "18:00",
+      "end": "02:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S25-4",
+      "date": "2026-11-26",
+      "start": "18:00",
+      "end": "02:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S26-1",
+      "date": "2026-11-27",
+      "start": "16:00",
+      "end": "00:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S26-2",
+      "date": "2026-11-27",
+      "start": "16:00",
+      "end": "00:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S26-3",
+      "date": "2026-11-27",
+      "start": "18:00",
+      "end": "02:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S26-4",
+      "date": "2026-11-27",
+      "start": "18:00",
+      "end": "02:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S27-1",
+      "date": "2026-11-28",
+      "start": "16:00",
+      "end": "00:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S27-2",
+      "date": "2026-11-28",
+      "start": "16:00",
+      "end": "00:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S27-3",
+      "date": "2026-11-28",
+      "start": "18:00",
+      "end": "02:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S27-4",
+      "date": "2026-11-28",
+      "start": "18:00",
+      "end": "02:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S28-1",
+      "date": "2026-11-29",
+      "start": "16:00",
+      "end": "00:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S28-2",
+      "date": "2026-11-29",
+      "start": "16:00",
+      "end": "00:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S28-3",
+      "date": "2026-11-29",
+      "start": "18:00",
+      "end": "02:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S28-4",
+      "date": "2026-11-29",
+      "start": "18:00",
+      "end": "02:00",
+      "vacant": true,
+      "personId": null
+    }
+  ]
+}
