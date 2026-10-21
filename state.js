@@ -1,8 +1,10 @@
 (function(root){
  'use strict';
  const planner=typeof module!=='undefined'?require('./planner.js'):root.Planner;
+ const scheduler=typeof module!=='undefined'?require('./scheduler.js'):root.Scheduler;
  function encode(input,result){return JSON.stringify({version:1,input,result},null,2);}
  function restoreResult(input,given){
+  if(input.schedulingMode==='weekly'){if(!['draft','approved'].includes(given?.status))throw Error('Invalid saved status.');const checked=scheduler.review(input,given.shifts,{searchLimited:given.searchLimited===true,manual:given.manual===true});return given.status==='approved'?planner.approve(checked):checked;}
   const days=planner.validate(input),rules=planner.rulesOf(input),allowed=planner.allowedMasks(rules);
   const fail=()=>{throw Error('The saved schedule does not match its input. Restore a valid backup.');};
   if(!given||!['draft','approved'].includes(given.status)||!Array.isArray(given.shifts)||given.shifts.length!==input.shifts.length||!Array.isArray(given.patterns)||given.patterns.length!==input.people.length)fail();

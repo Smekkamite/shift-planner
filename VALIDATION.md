@@ -1,68 +1,40 @@
 # Validation report
 
-## Result
+## Current result
 
-35 automated tests passed, 0 failed. Real-browser workflow checks passed over localhost. No JavaScript console errors were recorded during the final workflow.
+50 automated tests pass (`node --test`). Both regression and independent-week suites run in GitHub Actions. No JavaScript errors were recorded during the new workflow browser checks.
 
-## Automated coverage
+## New scheduling capabilities tested
 
-Run `node --test test.js`. The suite includes:
+- Different people have different weekly work/rest counts.
+- A dated week override takes precedence over a person default, which takes precedence over team defaults.
+- Availability can force a different arrangement in the following week.
+- No workday target allows arbitrary workday counts, including zero.
+- The default independent-week example covers 140/140 positions.
+- Consecutive rest may cross a week boundary; separated rest checks adjacent weeks.
+- Weeks with missing leading/trailing positions retain their rule origin.
+- A whole week without demand is reported safely.
+- New periods preserve personal defaults and the previous overnight boundary, but not old dated overrides or manual locks.
+- Manual vacancies/assignments are locked and survive regeneration and backups.
+- Manual edits that conflict with rest targets are retained as flagged drafts and cannot be approved.
+- Unavailable people, duplicate same-day assignments and overnight overlaps are rejected.
+- Tampering with a locked assignment in a backup is rejected.
 
-- Continuous 4 workdays / 3 rest days, week and period boundaries, explicit availability and one shift per person per day.
-- Legacy 4+3 fixture: 112 covered positions, 16 workdays / 128 hours per person. New default 5+2 example: 140 positions, 20 workdays / 160 hours per person.
-- Empty and unavailable teams, insufficient capacity, excess staff and rejected incomplete approvals.
-- Overnight overlaps within a period and across an approved period boundary.
-- Duplicate IDs, missing availability, invalid dates and times, leap years and year changes.
-- Maximum supported roster: 10 people, 35 days and 350 shift positions.
-- Input immutability, repeatable generation and repeated-approval rejection.
-- New-period settings, retained or reset cycles, new people and conflicting availability.
-- Backup round trips with drafts, approvals, cycle anchors and special-character names.
-- BOM-prefixed files; invalid, null, array, unknown-version and inconsistent backups.
-- Independent exhaustive comparisons: 60 availability/capacity scenarios plus 30 overnight-assignment scenarios.
+## Regression coverage
 
-Syntax and static checks verify JavaScript parsing, unique HTML IDs, existing local script assets, matching UI references, English document language and absence of a JSON input editor.
+Legacy 4+3 scheduling, all supported rest counts/grouping modes, full balanced examples, independent exhaustive comparisons on 60 capacity/availability and 30 overnight scenarios, leap days/year boundaries, malformed data, duplicate IDs, capacity shortages, excessive staffing, backup migration and approval validation remain covered.
 
-## Browser workflows verified
+## Browser checks for this update
 
-- Generate and approve the example; reload restores APPROVED and 112/112 coverage.
-- Change availability in week four; reload preserves the change and clears the previous approval.
-- Save the complete backup; restore it through the file picker and recover its approval and cycle anchors.
-- Attempt to restore a null backup; a clear error appears and existing data stays intact.
-- Edit a shift in week four; the editor remains on that week and retains the changed time.
-- Add international and special-character names, rename a person, reload and remove the renamed person.
-- Reach 10 people; an eleventh is rejected without changing the roster.
-- Create a one-week plan starting midweek with new hours; all 28 positions are covered.
-- Attempt an overlapping period while retaining approved cycles; reject it with an explanation beside the form.
-- Disable cycle retention; allow a fresh plan.
-- Add/remove shift positions and flag excess demand; disable incomplete approval (also verified in the preceding browser pass).
-- Clear local saved data; return to the example.
-- Export CSV with approved status and formula-like user text; independently parse 28 rows and verify spreadsheet formula escaping.
+- Reset to the independent-week example.
+- Give Amelia three rest days normally and four rest days in the second week: the roster reports 15 workdays and correctly exposes five uncovered positions.
+- Give Mateo No workday target: generation covers all 140 positions while preserving Amelia’s different rules.
+- Manually set a position vacant: coverage drops to 139/140 and approval is disabled.
+- Reload: the vacancy and manual lock are preserved.
+- Restore the original assignee and regenerate: all 140 positions remain covered and locks are respected.
 
-## Fixes from this review
+Earlier browser passes also cover names, adding/removing people and shifts, invalid-backup rejection, full backup restoration, CSV output, local saving and new periods. The prior local-file version was manually confirmed in Brave by the user; automated browser tests run over localhost because file:// is blocked by the browser automation policy.
 
-- Editing shifts preserves the selected week and editor scroll position.
-- Person renaming saves immediately and updates the Remove label.
-- Retained cycles are labelled next to person IDs.
-- Backup and new-plan feedback appears beside those controls.
-- Invalid backups have clearer errors; BOM files are supported.
-- Oversized shift data is rejected before searching.
-- The complete-cycle limitation is explained in the interface.
+## Limits
 
-## Verification limits
-
-Automated browser tests used the local HTTP server. The browser automation policy blocks file:// navigation. The user separately confirmed that opening index.html directly by double-click works in Brave, including generation, approval and restoration after reload. Scripts are ordinary local scripts with no imports, build step or external resources. Local storage behavior under file://, private browsing and browser restrictions remains browser-dependent; Save backup is the portable option. Storage-denial behavior and other browser engines were not exercised in real-browser tests.
-
-The app is a small-team portfolio demo: no minimum-rest or employment-law checks, direct Google Sheets connection, authenticated audit log or automatic holiday/sickness exceptions. A strict cycle may leave an entire person unassigned when one required day is incompatible. Search is bounded and reports when optimality is not guaranteed.
-
-## Configurable-rules update
-
-- Removed 4+3 from the app title, repository name and active scheduling requirements.
-- Tested every rest count 0–7 for supported modes, plus full seven-person coverage for all modes with 0–6 rest days.
-- Verified forced split availability: accepted in Flexible and Separated modes, rejected in Consecutive mode.
-- Verified a split pattern survives approval, backup restoration and a midweek new period.
-- Previous fixed-pattern backups migrate without changing their assignments.
-- Browser: default 5+2 generates 140/140 positions; approval survives reload. Separated mode also covers 140/140 positions with nonadjacent rest days. Impossible separated-rest counts show an explanatory error.
-
-The rules remain weekly: each person's selected seven-day pattern repeats across the planning horizon. Configurability does not imply arbitrary-length cycles or independent patterns each week.
-
-Browser: selecting 3 consecutive rest days, creating a two-week plan with 4 positions/day, generating 56/56 positions and approving survives reload with the selected rules.
+Maximum 10 people, 35 days and 350 positions; search is bounded per week and weeks are processed in sequence, so global optimality is not guaranteed. One shift per person per day, no overlaps or unavailable assignments. Partial weeks are checked only for visible days. Rest grouping outside the horizon and across separate periods/gaps is not inferred; overnight overlap metadata is preserved across new periods. No minimum-rest/employment-law checks. Browser storage behavior is browser-dependent; backups are portable. Other browser engines and storage-denial behavior were not exercised in real-browser tests.

@@ -1364,5 +1364,6 @@
   "rules": {
     "restDays": 2,
     "restMode": "flexible"
-  }
+  },
+  "schedulingMode": "weekly"
 }

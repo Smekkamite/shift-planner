@@ -20,7 +20,7 @@ function download(filename, body, type = 'application/json') {
 function invalidate() {
   result = null;
   el('status').textContent = 'Generate a new draft to see the schedule.';
-  ['result','roster','stats','totals','message','actionMessage','rulesNotice','week'].forEach(id => el(id).textContent = '');
+  ['result','roster','stats','totals','message','actionMessage','rulesNotice','personRulesNotice','week'].forEach(id => el(id).textContent = '');
   ['approve','csv'].forEach(id => el(id).disabled = true);
   saveState();
 }
@@ -40,19 +40,33 @@ function renderAvailability() {
   const days = Planner.validate(input);
   const week = Number(el('availabilityWeek').value || 0);
   const visible = days.slice(week*7, week*7+7);
-  el('availability').innerHTML = '<table><thead><tr><th scope="col">Person / ID</th>' + visible.map(d => '<th scope="col">' + escape(d) + '</th>').join('') + '</tr></thead><tbody>' + input.people.map((p, i) => '<tr><td><input type="text" maxlength="80" data-person="' + i + '" aria-label="Name for ' + escape(p.id) + '" value="' + escape(p.name) + '"><small>' + escape(p.id) + (p.cycleAnchor ? ' · pattern retained' : '') + '</small><button type="button" class="secondary" data-remove-person="' + i + '" aria-label="Remove ' + escape(p.name) + '">Remove</button></td>' + visible.map(d => '<td><input type="checkbox" data-person="' + i + '" data-date="' + d + '" aria-label="' + escape(p.id + ' available on ' + d) + '" ' + (p.availability[d] ? 'checked' : '') + '></td>').join('') + '</tr>').join('') + '</tbody></table>';
+  el('availability').innerHTML = '<table><thead><tr><th scope="col">Person / ID</th>' + visible.map(d => '<th scope="col">' + escape(d) + '</th>').join('') + '</tr></thead><tbody>' + input.people.map((p, i) => '<tr><td><input type="text" maxlength="80" data-person="' + i + '" aria-label="Name for ' + escape(p.id) + '" value="' + escape(p.name) + '"><small>' + escape(p.id) + (p.cycleAnchor && input.schedulingMode !== 'weekly' ? ' · pattern retained' : '') + '</small><button type="button" class="secondary" data-remove-person="' + i + '" aria-label="Remove ' + escape(p.name) + '">Remove</button></td>' + visible.map(d => '<td><input type="checkbox" data-person="' + i + '" data-date="' + d + '" aria-label="' + escape(p.id + ' available on ' + d) + '" ' + (p.availability[d] ? 'checked' : '') + '></td>').join('') + '</tr>').join('') + '</tbody></table>';
+}
+function renderPersonRules() {
+  const days = Planner.validate(input), start = days[Number(el('personRuleWeek').value || 0)*7];
+  const scoped = el('personRuleScope').value === 'week';
+  el('personRules').innerHTML = '<table><thead><tr><th>Person</th><th>Rule</th><th>Days off</th><th>Arrangement</th><th>Action</th></tr></thead><tbody>' + input.people.map((p,i) => {
+    const own = scoped ? p.weeklyRules?.[start] : p.rules;
+    const effective = own || (scoped ? p.rules : null) || Planner.rulesOf(input);
+    const kind = !own ? 'inherit' : own.restMode === 'unrestricted' ? 'free' : 'custom';
+    return '<tr data-person-rule="'+i+'"><td>'+escape(p.name)+'<small>'+escape(p.id)+(p.weeklyRules ? ' · '+Object.keys(p.weeklyRules).length+' week exceptions' : '')+'</small></td><td><select data-rule-field="kind" aria-label="Rule type for '+escape(p.id)+'">'+[['inherit','Inherit'],['custom','Custom'],['free','No workday target']].map(([value,label])=>'<option value="'+value+'" '+(kind===value?'selected':'')+'>'+label+'</option>').join('')+'</select></td><td><input type="number" min="0" max="7" value="'+(effective.restDays??0)+'" data-rule-field="days" aria-label="Days off for '+escape(p.id)+'" '+(kind!=='custom'?'disabled':'')+' style="width:55px"></td><td><select data-rule-field="mode" aria-label="Rest arrangement for '+escape(p.id)+'" '+(kind!=='custom'?'disabled':'')+'>'+['flexible','consecutive','separated'].map(mode=>'<option value="'+mode+'" '+(effective.restMode===mode?'selected':'')+'>'+mode+'</option>').join('')+'</select></td><td><button type="button" class="secondary" data-save-rule="'+i+'">Save rule for '+escape(p.id)+'</button></td></tr>';
+  }).join('')+'</tbody></table>';
+}
+function renderAssignmentEditor(dates) {
+  el('result').innerHTML = '<table><thead><tr><th>Date</th><th>Start</th><th>End</th><th>Assigned person</th><th>Lock</th></tr></thead><tbody>'+result.shifts.filter(s=>dates.has(s.date)).map(s=>'<tr><td>'+escape(s.date)+'</td><td>'+escape(s.start)+'</td><td>'+escape(s.end)+'</td><td><select data-assignment="'+escape(s.id)+'" aria-label="Assign '+escape(s.id)+'"><option value="" '+(s.personId===null?'selected':'')+'>Vacant</option>'+input.people.map(p=>'<option value="'+escape(p.id)+'" '+(s.personId===p.id?'selected':'')+' '+(!p.availability[s.date]?'disabled':'')+'>'+escape(p.name)+(!p.availability[s.date]?' (unavailable)':'')+'</option>').join('')+'</select></td><td>'+(Object.hasOwn(input.fixedAssignments??{},s.id)?'<button type="button" class="secondary" data-unlock="'+escape(s.id)+'">Unlock '+escape(s.id)+'</button>':'Automatic')+'</td></tr>').join('')+'</tbody></table>';
 }
 function reset() {
-  input = Planner.sample(); invalidate();
+  input = Planner.sample(); input.schedulingMode = 'weekly'; invalidate();
   refreshEditors();
 }
 function refreshEditors() {
   const scrolls = ['availability','shiftEditor'].map(id => ({id,top:el(id).scrollTop,left:el(id).scrollLeft}));
   const days = Planner.validate(input);
-  const rules = Planner.rulesOf(input); el('restDays').value = rules.restDays; el('restMode').value = rules.restMode;
-  el('rulesSummary').textContent = `${7-rules.restDays} workdays and ${rules.restDays} rest days per week · ${rules.restMode} rest. Match daily shift demand to available workdays.`;
-  ['availabilityWeek','shiftWeek'].forEach(target => {const previous = Number(el(target).value || 0); populateWeeks(target, days); el(target).value = Math.min(previous, Math.ceil(days.length / 7) - 1);});
-  renderAvailability(); renderShiftEditor();
+  const rules = Planner.rulesOf(input); el('restDays').value = rules.restDays ?? 0; el('restDays').disabled = rules.restMode === 'unrestricted'; el('restMode').value = rules.restMode;
+  el('rulesSummary').textContent = (rules.restMode === 'unrestricted' ? 'No weekly workday target' : `${7-rules.restDays} workdays and ${rules.restDays} rest days by default · ${rules.restMode} rest`) + (input.schedulingMode === 'weekly' ? ' · independent weeks; individual overrides available.' : ' · legacy repeating plan; Apply rules to enable independent weeks.');
+  el('keepCycles').disabled = input.schedulingMode === 'weekly'; if (el('keepCycles').disabled) el('keepCycles').checked = false;
+  ['availabilityWeek','shiftWeek','personRuleWeek'].forEach(target => {const previous = Number(el(target).value || 0); populateWeeks(target, days); el(target).value = Math.min(previous, Math.ceil(days.length / 7) - 1);});
+  renderAvailability(); renderShiftEditor(); renderPersonRules();
   scrolls.forEach(({id,top,left}) => {el(id).scrollTop = top; el(id).scrollLeft = left;});
   if (!days.includes(el('newDate').value)) el('newDate').value = days[0];
   el('planStart').value = Planner.add(days.at(-1), 1);
@@ -86,16 +100,16 @@ function render() {
   el('roster').innerHTML = table(['Person', ...days], input.people.map(p => [p.name, ...days.map(date => {
     const shift = result.shifts.find(s => s.date === date && s.personId === p.id);
     const pattern = result.patterns.find(c => c.personId === p.id);
-    return shift ? shift.start + '–' + shift.end : pattern.workMask === null ? 'Unassigned' : 'REST';
+    return shift ? shift.start + '–' + shift.end : result.unassignedPeople.some(issue => issue.id === p.id && (!issue.weekStart || issue.weekStart === result.days[Math.floor(result.days.indexOf(date)/7)*7])) ? 'Check rules' : 'REST';
   })]));
-  el('result').innerHTML = table(['Date','Start','End','Person ID','Person','Status'], result.shifts.filter(s => dates.has(s.date)).map(s => [s.date,s.start,s.end,s.personId || '—',name(s.personId),s.vacant ? 'Vacant' : 'Assigned']));
+  renderAssignmentEditor(dates);
   el('totals').innerHTML = table(['Person','Workdays','Hours','Cycle'], input.people.map(p => {
     const shifts = result.shifts.filter(s => s.personId === p.id);
     const hours = shifts.reduce((sum, s) => {
       const minutes = t => Number(t.slice(0,2))*60 + Number(t.slice(3));
       return sum + ((minutes(s.end)-minutes(s.start)+1440)%1440)/60;
     }, 0);
-    return [p.name,shifts.length,Math.round(hours*100)/100,result.patterns.find(c => c.personId === p.id).workMask === null ? 'Unassigned' : `${7-Planner.rulesOf(input).restDays} work / ${Planner.rulesOf(input).restDays} rest`];
+    return [p.name,shifts.length,Math.round(hours*100)/100,input.schedulingMode === 'weekly' ? 'Individual / weekly' : (p.rules?.restMode === 'unrestricted' ? 'No target' : `${7-Planner.rulesOf({rules:p.rules??Planner.rulesOf(input)}).restDays} work / ${Planner.rulesOf({rules:p.rules??Planner.rulesOf(input)}).restDays} rest`)];
   }));
   el('message').textContent = [
     ...result.unassignedPeople.map(p => name(p.id) + ': ' + p.reason),
@@ -108,35 +122,39 @@ function render() {
 }
 el('generate').onclick = () => {
   invalidate();
-  try { result = Planner.plan(input); populateWeeks('week', result.days); render(); }
+  try { result = Scheduler.plan(input); populateWeeks('week', result.days); render(); }
   catch (error) { el('message').textContent = error instanceof SyntaxError ? 'Invalid data. Restore a backup or reset the example.' : error.message; }
 };
 el('availability').onchange = event => {
   const control = event.target;
   if (!control.matches('input')) return;
   const person = input.people[Number(control.dataset.person)];
-  if (control.type === 'checkbox') person.availability[control.dataset.date] = control.checked;
+  let released = false;
+  if (control.type === 'checkbox') {person.availability[control.dataset.date] = control.checked; if (!control.checked) for (const [id,personId] of Object.entries(input.fixedAssignments??{})) if (personId === person.id && input.shifts.find(s=>s.id===id)?.date === control.dataset.date) {delete input.fixedAssignments[id];released = true;}}
   else {
     if (!control.value.trim()) {control.value = person.name; return;}
     person.name = control.value.trim();
     control.closest('tr').querySelector('button').setAttribute('aria-label', 'Remove ' + person.name);
   }
   invalidate();
+  if (released) el('message').textContent = 'Marked unavailable. Manual assignments for this person on that day were unlocked; regenerate the draft.';
 };
 el('availability').oninput = event => {if (event.target.type === 'text' && event.target.value.trim()) el('availability').onchange(event);};
 el('availabilityWeek').onchange = renderAvailability;
-el('approve').onclick = () => { try {result = Planner.approve(result); for (const person of input.people) {const pattern = result.patterns.find(p => p.personId === person.id); if (pattern.workMask !== null) {person.cycleAnchor = result.days[0]; person.cycleMask = pattern.workMask;}} renderAvailability(); render();} catch (error) {el('message').textContent = error.message;} };
+el('approve').onclick = () => { try {result = Planner.approve(result); for (const person of input.people) {const pattern = result.patterns.find(p => p.personId === person.id); if (input.schedulingMode !== 'weekly' && pattern.workMask !== null) {person.cycleAnchor = result.days[0]; person.cycleMask = pattern.workMask;}} renderAvailability(); render();} catch (error) {el('message').textContent = error.message;} };
 el('week').onchange = () => {if (result) render();};
+el('restMode').onchange = () => {el('restDays').disabled = el('restMode').value === 'unrestricted';};
 el('rulesForm').onsubmit = event => {
   event.preventDefault();
   const success = editModel(data => {
     const next = Planner.rulesOf({rules:{restDays:Number(el('restDays').value),restMode:el('restMode').value}});
+    data.schedulingMode = 'weekly';
     if (JSON.stringify(next) !== JSON.stringify(Planner.rulesOf(data))) {
       data.rules = next;
       data.people.forEach(person => {delete person.cycleAnchor; delete person.cycleMask;});
     }
   });
-  el('rulesNotice').textContent = success ? 'Rules applied. Generate a new draft. Changing rules releases retained patterns.' : el('message').textContent;
+  el('rulesNotice').textContent = success ? 'Defaults applied. Generate a new draft. Individual overrides are preserved; weeks are independent.' : el('message').textContent;
 };
 el('reset').onclick = reset;
 
@@ -149,7 +167,7 @@ el('csv').onclick = () => {
 };
 el('availability').onclick = event => {
   const button = event.target.closest('[data-remove-person]');
-  if (button) editModel(data => { data.people.splice(Number(button.dataset.removePerson), 1); });
+  if (button) editModel(data => { const [removed] = data.people.splice(Number(button.dataset.removePerson), 1); for (const [id,personId] of Object.entries(data.fixedAssignments??{})) if (personId === removed.id) delete data.fixedAssignments[id]; });
 };
 el('addPerson').onsubmit = event => {
   event.preventDefault();
@@ -178,7 +196,7 @@ el('shiftEditor').onchange = event => {
 };
 el('shiftEditor').onclick = event => {
   const button = event.target.closest('[data-remove-shift]');
-  if (button) editModel(data => {data.shifts.splice(Number(button.dataset.removeShift), 1);});
+  if (button) editModel(data => {const [removed] = data.shifts.splice(Number(button.dataset.removeShift), 1); if(data.fixedAssignments) delete data.fixedAssignments[removed.id];});
 };
 el('shiftWeek').onchange = renderShiftEditor;
 el('inputFile').onchange = async event => {
@@ -214,6 +232,57 @@ el('clearSaved').onclick = () => {
     suppressSave = true; reset(); suppressSave = false;
     el('saveStatus').textContent = 'Saved data cleared. The example is shown; your next change will be saved.';
   } catch { suppressSave = false; el('saveStatus').textContent = 'Browser storage is unavailable.'; }
+};
+el('personRuleScope').onchange = renderPersonRules;
+el('personRuleWeek').onchange = renderPersonRules;
+el('personRules').onchange = event => {
+  if (!event.target.matches('[data-rule-field="kind"]')) return;
+  const row = event.target.closest('tr');
+  row.querySelectorAll('[data-rule-field="days"],[data-rule-field="mode"]').forEach(control => control.disabled = event.target.value !== 'custom');
+};
+el('personRules').onclick = event => {
+  const button = event.target.closest('[data-save-rule]');
+  if (!button) return;
+  const index = Number(button.dataset.saveRule), row = button.closest('tr');
+  const kind = row.querySelector('[data-rule-field="kind"]').value;
+  const rule = kind === 'inherit' ? null : kind === 'free' ? {restDays:null,restMode:'unrestricted'} : {restDays:Number(row.querySelector('[data-rule-field="days"]').value || NaN),restMode:row.querySelector('[data-rule-field="mode"]').value};
+  const start = Planner.validate(input)[Number(el('personRuleWeek').value || 0)*7];
+  const success = editModel(data => {
+    if (rule) Planner.rulesOf({rules:rule});
+    data.schedulingMode = 'weekly';
+    const person = data.people[index]; delete person.cycleAnchor; delete person.cycleMask;
+    if (el('personRuleScope').value === 'week') {
+      person.weeklyRules ??= {};
+      if (rule) person.weeklyRules[start] = rule; else delete person.weeklyRules[start];
+    } else {
+      delete person.weeklyRules;
+      if (rule) person.rules = rule; else delete person.rules;
+    }
+  });
+  el('personRulesNotice').textContent = success ? 'Rule saved. Generate a new draft; existing manual locks will be respected.' : el('message').textContent;
+};
+el('result').onchange = event => {
+  const control = event.target;
+  if (!control.matches('[data-assignment]')) return;
+  try {
+    const changed = Scheduler.assign(input,result,control.dataset.assignment,control.value || null);
+    input = changed.input; result = changed.result; refreshEditors(); render();
+  } catch (error) {
+    render(); el('message').textContent = error.message;
+  }
+};
+el('result').onclick = event => {
+  const button = event.target.closest('[data-unlock]');
+  if (!button) return;
+  delete input.fixedAssignments[button.dataset.unlock];
+  if (input.schedulingMode === 'weekly') result = Scheduler.review(input,result.shifts,{manual:true});
+  render();
+};
+el('releaseLocks').onclick = () => {
+  delete input.fixedAssignments;
+  if (!result) {invalidate(); el('message').textContent = 'Manual locks released. Generate a new draft.'; return;}
+  if (input.schedulingMode === 'weekly') result = Scheduler.review(input,result.shifts,{manual:true});
+  render(); el('message').textContent = 'Manual locks released. Generate a new draft to recalculate assignments.';
 };
 function boot() {
   try {

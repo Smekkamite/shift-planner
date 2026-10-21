@@ -6,11 +6,13 @@ const modulo=n=>((n%7)+7)%7;
 const bitCount=mask=>Array.from({length:7},(_,i)=>(mask>>i)&1).reduce((a,b)=>a+b,0);
 function rulesOf(data){
  const rules=data.rules??{restDays:3,restMode:'consecutive'};
+ if(rules.restMode==='unrestricted')return {restDays:null,restMode:'unrestricted'};
  if(!Number.isInteger(rules.restDays)||rules.restDays<0||rules.restDays>7||!['consecutive','separated','flexible'].includes(rules.restMode))throw Error('Choose 0–7 rest days and a valid rest arrangement.');
  if(rules.restMode==='separated'&&rules.restDays>3)throw Error('Separated rest days allow at most 3 days off in a repeating 7-day week. Choose Flexible or Consecutive for more rest days.');
  return {restDays:rules.restDays,restMode:rules.restMode};
 }
 function allowedMasks(rules){
+ if(rules.restMode==='unrestricted')return Array.from({length:128},(_,mask)=>mask).sort((a,b)=>bitCount(b)-bitCount(a));
  const workDays=7-rules.restDays, masks=[];
  // Prefer simple rotating blocks when grouping is allowed; flexible mode still considers all masks.
  for(let phase=0;phase<7;phase++){let mask=0;for(let i=0;i<7;i++)if(modulo(i-phase)<workDays)mask|=1<<i;if(!masks.includes(mask))masks.push(mask);}
@@ -28,22 +30,21 @@ function validate(data){
  const dates=data.shifts.map(s=>s.date).sort(),start=dates[0],end=dates.at(-1),days=[];
  for(let d=start;d<=end;d=add(d,1)){days.push(d);if(days.length>35)throw Error('Maximum 35 days per plan.');}
  if(data.people.length>10)throw Error('Maximum 10 people in this demo.');
- for(const p of data.people){if(p.cycleMask!==undefined&&(!Number.isInteger(p.cycleMask)||p.cycleMask<0||p.cycleMask>127||!p.cycleAnchor))throw Error('Invalid retained pattern for '+p.id);if(p.cycleAnchor!==undefined&&(!/^\d{4}-\d{2}-\d{2}$/.test(p.cycleAnchor)||!Number.isFinite(Date.parse(p.cycleAnchor))||add(p.cycleAnchor,0)!==p.cycleAnchor))throw Error('Invalid cycle anchor for '+p.id);if(p.previousShiftEnd!==undefined&&!Number.isFinite(Date.parse(p.previousShiftEnd)))throw Error('Invalid previous shift end for '+p.id);}
+ for(const p of data.people){if(p.rules)rulesOf({rules:p.rules});if(p.weeklyRules){if(typeof p.weeklyRules!=='object'||Array.isArray(p.weeklyRules))throw Error('Invalid weekly rules for '+p.id);for(const [date,rule] of Object.entries(p.weeklyRules)){if(!/^\d{4}-\d{2}-\d{2}$/.test(date)||!Number.isFinite(Date.parse(date))||add(date,0)!==date)throw Error('Invalid rule week for '+p.id);rulesOf({rules:rule});}}if(p.cycleMask!==undefined&&(!Number.isInteger(p.cycleMask)||p.cycleMask<0||p.cycleMask>127||!p.cycleAnchor))throw Error('Invalid retained pattern for '+p.id);if(p.cycleAnchor!==undefined&&(!/^\d{4}-\d{2}-\d{2}$/.test(p.cycleAnchor)||!Number.isFinite(Date.parse(p.cycleAnchor))||add(p.cycleAnchor,0)!==p.cycleAnchor))throw Error('Invalid cycle anchor for '+p.id);if(p.previousShiftEnd!==undefined&&!Number.isFinite(Date.parse(p.previousShiftEnd)))throw Error('Invalid previous shift end for '+p.id);}
  for(const p of data.people)for(const d of days)if(typeof p.availability[d]!=='boolean')throw Error('Missing availability (true/false): '+p.id+' '+d);
+ if(data.fixedAssignments!==undefined){if(!data.fixedAssignments||typeof data.fixedAssignments!=='object'||Array.isArray(data.fixedAssignments))throw Error('Invalid manual assignments.');const booked=new Set();for(const [id,personId] of Object.entries(data.fixedAssignments)){const shift=data.shifts.find(s=>s.id===id);if(!shift||(personId!==null&&!ids.has(personId)))throw Error('Invalid manual assignment: '+id);if(personId!==null){const key=personId+'|'+shift.date;if(booked.has(key))throw Error('A person cannot have two shifts on the same day.');booked.add(key);if(!data.people.find(p=>p.id===personId).availability[shift.date])throw Error('The selected person is unavailable on '+shift.date);}}}
  return days;
 }
 function plan(data){
- const days=validate(data),capacity=days.map(d=>data.shifts.filter(s=>s.date===d).length);
- const rules=rulesOf(data),workDays=7-rules.restDays;
- const masks=allowedMasks(rules);
- const candidates=data.people.map(p=>masks.map(mask=>{
+ const days=validate(data),capacity=days.map(d=>data.shifts.filter(s=>s.date===d&&data.fixedAssignments?.[s.id]!==null).length);
+ const candidates=data.people.map(p=>{const rules=rulesOf({rules:p.rules??rulesOf(data)}),workDays=7-rules.restDays;const masks=p._allowedMasks??allowedMasks(rules);return masks.map(mask=>{
   const phase=Array.from({length:7},(_,phase)=>phase).find(phase=>Array.from({length:7},(_,i)=>!!(mask&(1<<i))===(modulo(i-phase)<workDays)).every(Boolean))??null;
   return {mask,phase,work:days.map((d,i)=>mask&(1<<(i%7))?i:-1).filter(i=>i>=0)};
  }).filter(c=>(!p.cycleAnchor||days.slice(0,7).every((d,i)=>{
   const previousIndex=modulo(offset(d,p.cycleAnchor));
   const previousWork=p.cycleMask===undefined?previousIndex<4:!!(p.cycleMask&(1<<previousIndex));
   return !!(c.mask&(1<<i))===previousWork;
- }))&&c.work.every(i=>p.availability[days[i]]&&capacity[i]>0)));
+ }))&&Object.entries(data.fixedAssignments??{}).filter(([,id])=>id===p.id).every(([id])=>c.work.includes(days.indexOf(data.shifts.find(s=>s.id===id).date)))&&c.work.every(i=>p.availability[days[i]]&&capacity[i]>0));});
  const order=data.people.map((_,i)=>i).sort((a,b)=>candidates[a].length-candidates[b].length),used=capacity.map(()=>0),choice=data.people.map(()=>null);
  let best=candidates.map(list=>list.find(c=>c.work.length===0)??null),bestAssignments=[],score=0,nodes=0,limited=false;
  const upper=order.map(i=>Math.max(0,...candidates[i].map(c=>c.work.length)));
@@ -61,7 +62,10 @@ function plan(data){
    const s=slots[pos],minute=t=>Number(t.slice(0,2))*60+Number(t.slice(3));
    const start=s.day*1440+minute(s.start),end=s.day*1440+minute(s.end)+(s.end<s.start?1440:0);
    const workers=choice.map((c,i)=>c?.work.includes(s.day)?i:-1).filter(i=>i>=0);
-   const remaining=workers.filter(i=>!usedToday.has(s.day+':'+i));
+   let remaining=workers.filter(i=>!usedToday.has(s.day+':'+i));
+   const fixed=data.fixedAssignments?.[s.id];
+   if(fixed===null){const later=slots.slice(pos+1).filter(x=>x.day===s.day&&data.fixedAssignments?.[x.id]!==null).length;return later>=remaining.length?visit(pos+1):false;}
+   if(fixed!==undefined){remaining=remaining.filter(i=>data.people[i].id===fixed);if(!remaining.length)return false;}
    if(!remaining.length)return visit(pos+1);
    for(const i of remaining)if(lastEnd[i]<=start){
     const previous=lastEnd[i];lastEnd[i]=end;usedToday.add(s.day+':'+i);assignments.push([s.index,i]);
@@ -69,18 +73,19 @@ function plan(data){
     assignments.pop();usedToday.delete(s.day+':'+i);lastEnd[i]=previous;
    }
    const later=slots.slice(pos+1).filter(x=>x.day===s.day).length;
-   if(later>=remaining.length)return visit(pos+1);
+   if(fixed===undefined&&later>=remaining.length)return visit(pos+1);
    return false;
   }
   return visit(0)?assignments:null;
  }
  function search(k,total){
+  if(score>=capacity.reduce((sum,n)=>sum+n,0))return;
   if(++nodes>250000){limited=true;return;}
   if(total+upper.slice(k).reduce((a,b)=>a+b,0)<=score)return;
   if(k===order.length){const assigned=matchShifts();if(assigned){score=total;best=choice.slice();bestAssignments=assigned;}return;}
   const i=order[k];
-  for(const c of [...candidates[i]].sort((a,b)=>a.work.reduce((sum,d)=>sum+used[d],0)-b.work.reduce((sum,d)=>sum+used[d],0)))if(c.work.every(d=>used[d]<capacity[d])){choice[i]=c;c.work.forEach(d=>used[d]++);search(k+1,total+c.work.length);c.work.forEach(d=>used[d]--);}
-  choice[i]=null;search(k+1,total);
+  for(const c of [...candidates[i]].sort((a,b)=>(b.mask===data.people[i]._preferredMask?1000:0)-(a.mask===data.people[i]._preferredMask?1000:0)+a.work.reduce((sum,d)=>sum+used[d],0)-b.work.reduce((sum,d)=>sum+used[d],0)))if(c.work.every(d=>used[d]<capacity[d])){choice[i]=c;c.work.forEach(d=>used[d]++);search(k+1,total+c.work.length);c.work.forEach(d=>used[d]--);}
+  choice[i]=candidates[i].find(c=>c.work.length===0)??null;search(k+1,total);
  }
  search(0,0);
  const shifts=data.shifts.map(s=>({...s,personId:null,vacant:true}));
@@ -98,6 +103,7 @@ function newPeriod(input,approved,settings){
  if(keepCycles&&approved?.status==='approved'&&start<=approved.days.at(-1))throw Error('To continue approved cycles, start after the previous plan ends.');
  const people=input.people.map(p=>{
   const copy={id:p.id,name:p.name,availability:{}};
+  if(p.rules)copy.rules={...p.rules};
   if(keepCycles){
    if(p.cycleAnchor)copy.cycleAnchor=p.cycleAnchor;
    if(p.cycleMask!==undefined)copy.cycleMask=p.cycleMask;
@@ -107,11 +113,18 @@ function newPeriod(input,approved,settings){
    const previous=approved?.status==='approved'?approved.shifts.filter(s=>s.personId===p.id).sort((a,b)=>b.date.localeCompare(a.date))[0]:null;
    if(previous){let end=Date.parse(previous.date+'T'+previous.end+':00Z');if(previous.end<previous.start)end+=86400000;if(end>Date.parse(start+'T00:00:00Z'))copy.previousShiftEnd=new Date(end).toISOString();}
   }
+  // Keep the last approved overnight boundary even when weekly patterns are independent.
+  if(input.schedulingMode==='weekly'){
+   const previous=approved?.status==='approved'?approved.shifts.filter(s=>s.personId===p.id).sort((a,b)=>b.date.localeCompare(a.date))[0]:null;
+   const prior=p.previousShiftEnd?Date.parse(p.previousShiftEnd):-Infinity;
+   let end=prior;if(previous){end=Date.parse(previous.date+'T'+previous.end+':00Z');if(previous.end<previous.start)end+=86400000;}
+   if(end>Date.parse(start+'T00:00:00Z'))copy.previousShiftEnd=new Date(end).toISOString();
+  }
   return copy;
  });
  const shifts=[];
  for(let i=0;i<weeks*7;i++){const date=add(start,i);people.forEach((p,j)=>p.availability[date]=input.people[j].availability[date]??true);for(let j=0;j<positions;j++)shifts.push({id:`S${i+1}-${j+1}`,date,start:shiftStart,end:shiftEnd,vacant:true,personId:null});}
- const next={people,shifts,rules};validate(next);return next;
+ const next={people,shifts,rules};if(input.schedulingMode)next.schedulingMode=input.schedulingMode;validate(next);return next;
 }
 function sample(rules={restDays:2,restMode:'flexible'}){rules=rulesOf({rules});const people=['Amelia Brooks','Mateo García','Amina Hassan','Kenji Tanaka','Chloé Dubois','Liam O’Connor','Priya Sharma'].map((name,i)=>({id:'P'+(i+1),name,availability:{}})),shifts=[];for(let i=0;i<28;i++){const date=add('2026-11-02',i);people.forEach(p=>p.availability[date]=true);for(let j=0;j<7-rules.restDays;j++)shifts.push({id:`S${i+1}-${j+1}`,date,start:j<2?'16:00':'18:00',end:j<2?'00:00':'02:00',vacant:true,personId:null});}return {people,shifts,rules};}
 const api={plan,approve,sample,add,validate,newPeriod,rulesOf,allowedMasks};if(typeof module!=='undefined')module.exports=api;else root.Planner=api;
