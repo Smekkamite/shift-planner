@@ -273,6 +273,14 @@
       "personId": null
     },
     {
+      "id": "S1-5",
+      "date": "2026-11-02",
+      "start": "18:00",
+      "end": "02:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
       "id": "S2-1",
       "date": "2026-11-03",
       "start": "16:00",
@@ -298,6 +306,14 @@
     },
     {
       "id": "S2-4",
+      "date": "2026-11-03",
+      "start": "18:00",
+      "end": "02:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S2-5",
       "date": "2026-11-03",
       "start": "18:00",
       "end": "02:00",
@@ -337,6 +353,14 @@
       "personId": null
     },
     {
+      "id": "S3-5",
+      "date": "2026-11-04",
+      "start": "18:00",
+      "end": "02:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
       "id": "S4-1",
       "date": "2026-11-05",
       "start": "16:00",
@@ -362,6 +386,14 @@
     },
     {
       "id": "S4-4",
+      "date": "2026-11-05",
+      "start": "18:00",
+      "end": "02:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S4-5",
       "date": "2026-11-05",
       "start": "18:00",
       "end": "02:00",
@@ -401,6 +433,14 @@
       "personId": null
     },
     {
+      "id": "S5-5",
+      "date": "2026-11-06",
+      "start": "18:00",
+      "end": "02:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
       "id": "S6-1",
       "date": "2026-11-07",
       "start": "16:00",
@@ -426,6 +466,14 @@
     },
     {
       "id": "S6-4",
+      "date": "2026-11-07",
+      "start": "18:00",
+      "end": "02:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S6-5",
       "date": "2026-11-07",
       "start": "18:00",
       "end": "02:00",
@@ -465,6 +513,14 @@
       "personId": null
     },
     {
+      "id": "S7-5",
+      "date": "2026-11-08",
+      "start": "18:00",
+      "end": "02:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
       "id": "S8-1",
       "date": "2026-11-09",
       "start": "16:00",
@@ -490,6 +546,14 @@
     },
     {
       "id": "S8-4",
+      "date": "2026-11-09",
+      "start": "18:00",
+      "end": "02:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S8-5",
       "date": "2026-11-09",
       "start": "18:00",
       "end": "02:00",
@@ -529,6 +593,14 @@
       "personId": null
     },
     {
+      "id": "S9-5",
+      "date": "2026-11-10",
+      "start": "18:00",
+      "end": "02:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
       "id": "S10-1",
       "date": "2026-11-11",
       "start": "16:00",
@@ -554,6 +626,14 @@
     },
     {
       "id": "S10-4",
+      "date": "2026-11-11",
+      "start": "18:00",
+      "end": "02:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S10-5",
       "date": "2026-11-11",
       "start": "18:00",
       "end": "02:00",
@@ -593,6 +673,14 @@
       "personId": null
     },
     {
+      "id": "S11-5",
+      "date": "2026-11-12",
+      "start": "18:00",
+      "end": "02:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
       "id": "S12-1",
       "date": "2026-11-13",
       "start": "16:00",
@@ -618,6 +706,14 @@
     },
     {
       "id": "S12-4",
+      "date": "2026-11-13",
+      "start": "18:00",
+      "end": "02:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S12-5",
       "date": "2026-11-13",
       "start": "18:00",
       "end": "02:00",
@@ -657,6 +753,14 @@
       "personId": null
     },
     {
+      "id": "S13-5",
+      "date": "2026-11-14",
+      "start": "18:00",
+      "end": "02:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
       "id": "S14-1",
       "date": "2026-11-15",
       "start": "16:00",
@@ -682,6 +786,14 @@
     },
     {
       "id": "S14-4",
+      "date": "2026-11-15",
+      "start": "18:00",
+      "end": "02:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S14-5",
       "date": "2026-11-15",
       "start": "18:00",
       "end": "02:00",
@@ -721,6 +833,14 @@
       "personId": null
     },
     {
+      "id": "S15-5",
+      "date": "2026-11-16",
+      "start": "18:00",
+      "end": "02:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
       "id": "S16-1",
       "date": "2026-11-17",
       "start": "16:00",
@@ -746,6 +866,14 @@
     },
     {
       "id": "S16-4",
+      "date": "2026-11-17",
+      "start": "18:00",
+      "end": "02:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S16-5",
       "date": "2026-11-17",
       "start": "18:00",
       "end": "02:00",
@@ -785,6 +913,14 @@
       "personId": null
     },
     {
+      "id": "S17-5",
+      "date": "2026-11-18",
+      "start": "18:00",
+      "end": "02:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
       "id": "S18-1",
       "date": "2026-11-19",
       "start": "16:00",
@@ -810,6 +946,14 @@
     },
     {
       "id": "S18-4",
+      "date": "2026-11-19",
+      "start": "18:00",
+      "end": "02:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S18-5",
       "date": "2026-11-19",
       "start": "18:00",
       "end": "02:00",
@@ -849,6 +993,14 @@
       "personId": null
     },
     {
+      "id": "S19-5",
+      "date": "2026-11-20",
+      "start": "18:00",
+      "end": "02:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
       "id": "S20-1",
       "date": "2026-11-21",
       "start": "16:00",
@@ -874,6 +1026,14 @@
     },
     {
       "id": "S20-4",
+      "date": "2026-11-21",
+      "start": "18:00",
+      "end": "02:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S20-5",
       "date": "2026-11-21",
       "start": "18:00",
       "end": "02:00",
@@ -913,6 +1073,14 @@
       "personId": null
     },
     {
+      "id": "S21-5",
+      "date": "2026-11-22",
+      "start": "18:00",
+      "end": "02:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
       "id": "S22-1",
       "date": "2026-11-23",
       "start": "16:00",
@@ -938,6 +1106,14 @@
     },
     {
       "id": "S22-4",
+      "date": "2026-11-23",
+      "start": "18:00",
+      "end": "02:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S22-5",
       "date": "2026-11-23",
       "start": "18:00",
       "end": "02:00",
@@ -977,6 +1153,14 @@
       "personId": null
     },
     {
+      "id": "S23-5",
+      "date": "2026-11-24",
+      "start": "18:00",
+      "end": "02:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
       "id": "S24-1",
       "date": "2026-11-25",
       "start": "16:00",
@@ -1002,6 +1186,14 @@
     },
     {
       "id": "S24-4",
+      "date": "2026-11-25",
+      "start": "18:00",
+      "end": "02:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S24-5",
       "date": "2026-11-25",
       "start": "18:00",
       "end": "02:00",
@@ -1041,6 +1233,14 @@
       "personId": null
     },
     {
+      "id": "S25-5",
+      "date": "2026-11-26",
+      "start": "18:00",
+      "end": "02:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
       "id": "S26-1",
       "date": "2026-11-27",
       "start": "16:00",
@@ -1066,6 +1266,14 @@
     },
     {
       "id": "S26-4",
+      "date": "2026-11-27",
+      "start": "18:00",
+      "end": "02:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
+      "id": "S26-5",
       "date": "2026-11-27",
       "start": "18:00",
       "end": "02:00",
@@ -1105,6 +1313,14 @@
       "personId": null
     },
     {
+      "id": "S27-5",
+      "date": "2026-11-28",
+      "start": "18:00",
+      "end": "02:00",
+      "vacant": true,
+      "personId": null
+    },
+    {
       "id": "S28-1",
       "date": "2026-11-29",
       "start": "16:00",
@@ -1135,6 +1351,18 @@
       "end": "02:00",
       "vacant": true,
       "personId": null
+    },
+    {
+      "id": "S28-5",
+      "date": "2026-11-29",
+      "start": "18:00",
+      "end": "02:00",
+      "vacant": true,
+      "personId": null
     }
-  ]
+  ],
+  "rules": {
+    "restDays": 2,
+    "restMode": "flexible"
+  }
 }

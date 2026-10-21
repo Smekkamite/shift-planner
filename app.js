@@ -20,7 +20,7 @@ function download(filename, body, type = 'application/json') {
 function invalidate() {
   result = null;
   el('status').textContent = 'Generate a new draft to see the schedule.';
-  ['result','roster','stats','totals','message','actionMessage','week'].forEach(id => el(id).textContent = '');
+  ['result','roster','stats','totals','message','actionMessage','rulesNotice','week'].forEach(id => el(id).textContent = '');
   ['approve','csv'].forEach(id => el(id).disabled = true);
   saveState();
 }
@@ -40,7 +40,7 @@ function renderAvailability() {
   const days = Planner.validate(input);
   const week = Number(el('availabilityWeek').value || 0);
   const visible = days.slice(week*7, week*7+7);
-  el('availability').innerHTML = '<table><thead><tr><th scope="col">Person / ID</th>' + visible.map(d => '<th scope="col">' + escape(d) + '</th>').join('') + '</tr></thead><tbody>' + input.people.map((p, i) => '<tr><td><input type="text" maxlength="80" data-person="' + i + '" aria-label="Name for ' + escape(p.id) + '" value="' + escape(p.name) + '"><small>' + escape(p.id) + (p.cycleAnchor ? ' · cycle retained' : '') + '</small><button type="button" class="secondary" data-remove-person="' + i + '" aria-label="Remove ' + escape(p.name) + '">Remove</button></td>' + visible.map(d => '<td><input type="checkbox" data-person="' + i + '" data-date="' + d + '" aria-label="' + escape(p.id + ' available on ' + d) + '" ' + (p.availability[d] ? 'checked' : '') + '></td>').join('') + '</tr>').join('') + '</tbody></table>';
+  el('availability').innerHTML = '<table><thead><tr><th scope="col">Person / ID</th>' + visible.map(d => '<th scope="col">' + escape(d) + '</th>').join('') + '</tr></thead><tbody>' + input.people.map((p, i) => '<tr><td><input type="text" maxlength="80" data-person="' + i + '" aria-label="Name for ' + escape(p.id) + '" value="' + escape(p.name) + '"><small>' + escape(p.id) + (p.cycleAnchor ? ' · pattern retained' : '') + '</small><button type="button" class="secondary" data-remove-person="' + i + '" aria-label="Remove ' + escape(p.name) + '">Remove</button></td>' + visible.map(d => '<td><input type="checkbox" data-person="' + i + '" data-date="' + d + '" aria-label="' + escape(p.id + ' available on ' + d) + '" ' + (p.availability[d] ? 'checked' : '') + '></td>').join('') + '</tr>').join('') + '</tbody></table>';
 }
 function reset() {
   input = Planner.sample(); invalidate();
@@ -49,6 +49,8 @@ function reset() {
 function refreshEditors() {
   const scrolls = ['availability','shiftEditor'].map(id => ({id,top:el(id).scrollTop,left:el(id).scrollLeft}));
   const days = Planner.validate(input);
+  const rules = Planner.rulesOf(input); el('restDays').value = rules.restDays; el('restMode').value = rules.restMode;
+  el('rulesSummary').textContent = `${7-rules.restDays} workdays and ${rules.restDays} rest days per week · ${rules.restMode} rest. Match daily shift demand to available workdays.`;
   ['availabilityWeek','shiftWeek'].forEach(target => {const previous = Number(el(target).value || 0); populateWeeks(target, days); el(target).value = Math.min(previous, Math.ceil(days.length / 7) - 1);});
   renderAvailability(); renderShiftEditor();
   scrolls.forEach(({id,top,left}) => {el(id).scrollTop = top; el(id).scrollLeft = left;});
@@ -67,8 +69,8 @@ function updateModel(candidate) {
   input = candidate; invalidate(); refreshEditors();
 }
 function editModel(change) {
-  try { const candidate = structuredClone(input); change(candidate); updateModel(candidate); }
-  catch (error) { el('message').textContent = error.message; refreshEditors(); }
+  try { const candidate = structuredClone(input); change(candidate); updateModel(candidate); return true; }
+  catch (error) { el('message').textContent = error.message; refreshEditors(); return false; }
 }
 function renderShiftEditor() {
   const days = Planner.validate(input), week = Number(el('shiftWeek').value || 0);
@@ -84,7 +86,7 @@ function render() {
   el('roster').innerHTML = table(['Person', ...days], input.people.map(p => [p.name, ...days.map(date => {
     const shift = result.shifts.find(s => s.date === date && s.personId === p.id);
     const pattern = result.patterns.find(c => c.personId === p.id);
-    return shift ? shift.start + '–' + shift.end : pattern.phase === null ? 'Unassigned' : 'REST';
+    return shift ? shift.start + '–' + shift.end : pattern.workMask === null ? 'Unassigned' : 'REST';
   })]));
   el('result').innerHTML = table(['Date','Start','End','Person ID','Person','Status'], result.shifts.filter(s => dates.has(s.date)).map(s => [s.date,s.start,s.end,s.personId || '—',name(s.personId),s.vacant ? 'Vacant' : 'Assigned']));
   el('totals').innerHTML = table(['Person','Workdays','Hours','Cycle'], input.people.map(p => {
@@ -93,7 +95,7 @@ function render() {
       const minutes = t => Number(t.slice(0,2))*60 + Number(t.slice(3));
       return sum + ((minutes(s.end)-minutes(s.start)+1440)%1440)/60;
     }, 0);
-    return [p.name,shifts.length,Math.round(hours*100)/100,result.patterns.find(c => c.personId === p.id).phase === null ? 'Unassigned' : '4 work / 3 rest'];
+    return [p.name,shifts.length,Math.round(hours*100)/100,result.patterns.find(c => c.personId === p.id).workMask === null ? 'Unassigned' : `${7-Planner.rulesOf(input).restDays} work / ${Planner.rulesOf(input).restDays} rest`];
   }));
   el('message').textContent = [
     ...result.unassignedPeople.map(p => name(p.id) + ': ' + p.reason),
@@ -123,8 +125,19 @@ el('availability').onchange = event => {
 };
 el('availability').oninput = event => {if (event.target.type === 'text' && event.target.value.trim()) el('availability').onchange(event);};
 el('availabilityWeek').onchange = renderAvailability;
-el('approve').onclick = () => { try {result = Planner.approve(result); for (const person of input.people) {const pattern = result.patterns.find(p => p.personId === person.id); if (pattern.phase !== null) person.cycleAnchor = Planner.add(result.days[0], pattern.phase);} renderAvailability(); render();} catch (error) {el('message').textContent = error.message;} };
+el('approve').onclick = () => { try {result = Planner.approve(result); for (const person of input.people) {const pattern = result.patterns.find(p => p.personId === person.id); if (pattern.workMask !== null) {person.cycleAnchor = result.days[0]; person.cycleMask = pattern.workMask;}} renderAvailability(); render();} catch (error) {el('message').textContent = error.message;} };
 el('week').onchange = () => {if (result) render();};
+el('rulesForm').onsubmit = event => {
+  event.preventDefault();
+  const success = editModel(data => {
+    const next = Planner.rulesOf({rules:{restDays:Number(el('restDays').value),restMode:el('restMode').value}});
+    if (JSON.stringify(next) !== JSON.stringify(Planner.rulesOf(data))) {
+      data.rules = next;
+      data.people.forEach(person => {delete person.cycleAnchor; delete person.cycleMask;});
+    }
+  });
+  el('rulesNotice').textContent = success ? 'Rules applied. Generate a new draft. Changing rules releases retained patterns.' : el('message').textContent;
+};
 el('reset').onclick = reset;
 
 el('inputDownload').onclick = () => download('shift-planner-backup.json', PlannerState.encode(input, result));

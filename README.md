@@ -1,76 +1,62 @@
-# Shift Planner — 4 workdays / 3 rest days
+# Shift Planner
 
-A small, dependency-free scheduling demo for an operations and administrative support portfolio. Matches people to vacant shifts using daily availability, a continuous four-days-on / three-days-off cycle, and manager approval.
+A small local staff scheduler with configurable weekly work/rest rules, daily availability, manager approval and portable backups. No installation, account or external service is required.
 
 ## Quick start
 
-Download the repository ZIP, extract it and open **index.html** in a browser. Click **Generate draft**, review the roster and click **Approve plan**. No installation is needed. Direct opening has been manually confirmed in Brave.
+Download the repository ZIP, extract it and open **index.html** in your browser. Direct opening was manually confirmed in Brave for the previous version; the updated version uses the same local-script approach. Automated browser checks use localhost.
 
-## Background
+1. In **Weekly rules & availability**, choose **Days off per week** and **Rest arrangement**, then click **Apply rules**.
+2. Edit names, add/remove people and tick daily availability. Checked means available, not necessarily scheduled.
+3. Expand **Manage shifts** to change dates, times and staffing demand, or use **New plan** to create a fresh period.
+4. Click **Generate draft**, inspect the weekly roster and uncovered positions, then **Approve plan** when complete.
+5. Use **Export CSV** for a spreadsheet or **Save backup** to preserve editable data and approval. **Restore backup** reopens a saved copy.
 
-This is a rebuilt demonstration inspired by a scheduling workflow Alex Campigotto originally created while managing a bar team in Brussels. This implementation is new; it is not the original production workflow. All names, IDs, dates and shifts are synthetic.
+The default example has seven fictional international team members, 28 days, five positions per day, and five workdays plus two rest days per person. It covers **140/140 positions**, with **20 workdays / 160 hours** per person. The original four-work / three-rest arrangement remains available by choosing three days off and consecutive rest.
 
-## Run
+## Weekly rules
 
-Open `index.html` in a modern browser. No installation, account or server is required. Data stays in the browser. Changes and approvals are automatically saved in local browser storage when available. Check the save status. Browser privacy settings, private browsing, clearing storage or moving the app folder can affect persistence, especially when opening via file://. Use Save backup for a portable copy.
+Choose 0–7 rest days. Workdays are calculated as `7 - restDays`.
 
-1. Use the example or edit names directly in the people table. IDs are generated automatically when adding people.
-2. Tick or untick daily availability; switch weeks with **Availability week**.
-3. Use **Add person** and the **Remove** buttons to manage the team.
-4. Expand **Manage shifts** to add positions, edit dates and times, or remove shifts. Multiple positions on the same date are separate shifts.
-5. Click **Generate draft**. Review the weekly person-by-day roster, rest days, shift details and full-period totals.
-6. Click **Approve plan** once the plan is complete. Any data change clears the previous draft and approval.
-7. Use **Export CSV** for spreadsheet output. Incomplete plans can be exported as drafts but cannot be approved.
-8. Use **Save backup** to save the editable data, cycle anchors and current draft or approval together. **Restore backup** reopens that file; no manual JSON editing is needed. Older input-only files are also accepted.
-9. Expand **New plan**, choose the start date, 1–5 weeks, usual shift hours and the number of people needed each day. Creating it replaces current shifts and keeps the current team. Save a backup first to archive the old period. Additional shift times can be edited under Manage shifts.
-10. Keep **Keep existing 4+3 cycles** checked to retain approved cycles. Uncheck it to allow new patterns. **Clear saved data** removes the local save and displays the example; the next edit or generation resumes autosaving.
+| Rest arrangement | Meaning |
+| --- | --- |
+| Flexible | Rest days may be together or split; no grouping constraint. |
+| Consecutive | All rest days form one continuous block, including across week boundaries. |
+| Separated | No two rest days touch, including across week boundaries. At most three rest days fit in a repeating seven-day week. |
 
-The English interface includes fictional international team members: Amelia Brooks, Mateo García, Amina Hassan, Kenji Tanaka, Chloé Dubois, Liam O’Connor and Priya Sharma.
+Rules apply to the whole team. The planner selects one repeating seven-day pattern per person; it does not independently redesign every week. Availability and capacity must support the whole selected pattern. A single incompatible day can leave a person unassigned for the period. Incomplete drafts cannot be approved.
 
-The example should cover all 112 shifts, assigning 16 working days and 128 hours to each person. Evening shifts run 16:00–00:00 and 18:00–02:00.
+Changing rules releases retained patterns and clears the old draft/approval. The interface shows the active rule summary and marks retained patterns next to person IDs.
 
-## Data format (developer reference only)
+## New periods and continuity
 
-```json
-{
-  "people": [{
-    "id": "P1",
-    "name": "Amelia Brooks",
-    "availability": {"2026-11-02": true}
-  }],
-  "shifts": [{
-    "id": "S1",
-    "date": "2026-11-02",
-    "start": "18:00",
-    "end": "02:00",
-    "vacant": true,
-    "personId": null
-  }]
-}
-```
+**New plan** chooses a start date, 1–5 weeks, usual start/end times and daily positions. It retains your team and replaces current shifts. Save a backup first if you need an archive.
 
-This illustrates the schema, not a full weekly dataset. Use the bundled `sample-data.json` for a complete example. Every person must have an explicit boolean availability for every calendar day between the first and last shift. Unavailable is different from resting: the scheduler determines rest days.
+Approval saves each person's seven-day work/rest mask and reference date. **Keep existing weekly patterns** preserves that pattern in the next period, even when it begins midweek. Uncheck it to recalculate patterns. Rules must remain compatible when retaining a pattern. New dates default to available; overlapping dates preserve recorded availability.
 
-Each shift is one position. For four people on the same hours, create four shifts with unique IDs. Input shifts must be vacant. Regeneration creates a new proposal from the input, rather than preserving previous assignments.
+A gap between periods preserves the theoretical weekly pattern but is not itself scheduled or checked. Overnight assignments at the previous approved boundary are checked for overlap.
 
-## Scheduling rules
+## Saving and backups
 
-- One shift per person per calendar day.
-- A person receives a repeating 7-day pattern: 4 consecutive workdays followed by 3 consecutive rest days. There are 7 possible offsets; the scheduler chooses one per person.
-- The pattern continues across week boundaries. The visible horizon may start or end partway through a block; days outside it are not scheduled or checked. Approving a plan stores a cycle anchor for each person. New plans retain these anchors by default, including when the next period starts midweek. Unavailability that conflicts with a retained cycle is reported rather than silently shifting rest days. An overlapping new period is rejected when continuing an approved plan. A gap between periods preserves the theoretical pattern but is not scheduled or checked.
-- Each active day in a person's pattern must have availability and a vacant position. Partial work blocks are not used to hide a conflict. A single incompatible day can therefore leave a person unassigned for the entire period; the UI explains this limitation.
-- The search maximizes covered positions within those rules. People without a feasible pattern are reported rather than forced into an invalid assignment.
-- Backtracking across patterns and actual shift assignments is bounded to 250,000 visited nodes, 10 people, 35 days and 350 shift positions. When the search limit is hit, the app reports that optimal coverage is not guaranteed. This is a small-team demo, not a large-scale optimizer.
-- Actual shift assignments are checked for temporal overlaps, including overnight shifts. This does not enforce a minimum rest interval.
-- Overnight shifts belong to their start date. Hours are calculated modulo 24; shifts must be shorter than 24 hours. Times are wall-clock values, without timezone or daylight-saving calculations.
+Changes and approval are automatically saved on this device when browser storage is available. Check the save indicator. Private browsing, browser restrictions, clearing storage or moving the app folder can affect persistence, particularly under file://. **Save backup** is the portable option.
 
-The phase is relative to the first date in `days`: a person works when `(dayIndex - phase + 7) % 7 < 4`.
+A backup contains source data, active rules, retained patterns and the current draft/approval. Older input files and fixed 4+3 backups are supported: their recorded assignments are validated and migrated, rather than being silently rescheduled. Invalid or inconsistent backups are rejected without replacing the current data.
 
-## Scope
+**Clear saved data** removes the browser save and displays the example; the next change resumes saving. **Reset example** replaces the current data with the default example.
 
-Manager approval is a local saved status, not an authenticated audit trail. Editing input invalidates the current proposal. Exports retain draft/approved status. There is no direct Google Sheets connection, payroll processing, automatic notification, drag-and-drop reassignment, minimum rest-time enforcement, skill matching or legal compliance engine. Shift lengths and total hours are displayed, not optimized. All staff are assumed equally qualified for all example shifts.
+## Input and output
 
-## Tests
+Normal editing uses forms and checkboxes; manual JSON editing is unnecessary. Developers can inspect `sample-data.json`.
+
+- People: unique ID, name, daily boolean availability and optional retained pattern metadata.
+- Shifts: unique ID, date, start/end times, vacancy and assigned person ID in generated output.
+- Rules: `restDays` and `restMode` (`flexible`, `consecutive` or `separated`).
+
+Each shift represents one staffing position. Input positions are vacant. A new generation starts from those positions, not from previous assignments. An end time earlier than the start means the shift ends the next day. Overnight shifts belong to their start date.
+
+CSV includes person IDs, names, dates, hours and draft/approved status. It can be opened in Excel or Google Sheets; there is no live Google Sheets connection.
+
+## Validation
 
 With Node.js 18+:
 
@@ -78,15 +64,25 @@ With Node.js 18+:
 node --test test.js
 ```
 
-28 automated tests cover full sample coverage, continuous cycles, constrained availability, staffing shortages, oversupply, duplicate IDs, missing availability, malformed shifts, overnight overlaps, input immutability and approval restrictions. An independent exhaustive oracle checks optimal coverage on 60 small deterministic random datasets and 30 further datasets with overnight assignment constraints. Tests also cover period creation, continuity, previous overnight shifts, backup restoration and malformed backups. See `VALIDATION.md` for browser checks.
+The suite covers configurable rest counts and grouping, legacy 4+3 behavior, availability, coverage, overnight overlaps, new periods, continuity, malformed inputs, backup migration and approval. Independent exhaustive comparisons cover 60 capacity/availability scenarios and 30 overnight scenarios. GitHub Actions runs the suite on each push and pull request. See [VALIDATION.md](VALIDATION.md) for verification details.
+
+## Limits
+
+Small-team portfolio demonstration: maximum 10 people, 35 days and 350 positions. Search is bounded to 250,000 visited nodes and explicitly reports when optimal coverage is not guaranteed. Staff are assumed equally qualified. Shift hours are reported, not balanced or optimized. Times use wall-clock arithmetic without daylight-saving conversion.
+
+No minimum-rest or employment-law checks, payroll processing, automatic holiday/sickness exceptions, notifications, authenticated audit log or manual drag-and-drop assignment. Approval is a local saved status.
+
+## Background
+
+Rebuilt demonstration inspired by a scheduling workflow Alex Campigotto originally created while managing a bar team in Brussels. This is a new implementation with generalized scheduling rules, not the original production workflow. Names, IDs, availability and shifts are synthetic.
 
 ## Files
 
-- `index.html`: English-language local interface with forms, availability checkboxes and a weekly roster.
-- `planner.js`: pure scheduling engine, usable in Node.js or the browser.
-- `app.js`: form-based editing, automatic local saving, backup/restore, new plans, review, approval and CSV export.
-- `state.js`: versioned backup encoding and validation on restoration.
-- `sample-data.json`: synthetic input data.
-- `test.js`: automated tests using the Node.js standard library.
+- `index.html`: English interface.
+- `planner.js`: scheduling engine and rule validation.
+- `app.js`: forms, roster, local saving, backup and CSV output.
+- `state.js`: backup validation and migration.
+- `sample-data.json`: fictional 5-work / 2-rest example.
+- `test.js`: automated regression and rule tests.
 
-No external dependencies or external API calls.
+No external runtime dependencies or API calls.
